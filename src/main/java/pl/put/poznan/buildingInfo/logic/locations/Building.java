@@ -1,6 +1,7 @@
 package pl.put.poznan.buildingInfo.logic.locations;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import pl.put.poznan.buildingInfo.logic.visitors.Visitor;
 
 import java.util.Set;
@@ -9,6 +10,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@SuperBuilder
 public class Building extends AbstractLocation{
 
     private Set<Floor> floors;

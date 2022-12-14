@@ -7,7 +7,7 @@ import pl.put.poznan.buildingInfo.logic.locations.Room;
 public class CubatureVisitor implements Visitor{
     @Override
     public Float visitRoom(Room room) {
-        return room.getVolume();
+        return room.getCube();
     }
 
     @Override
