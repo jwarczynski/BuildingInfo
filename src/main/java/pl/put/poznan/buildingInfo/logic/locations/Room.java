@@ -16,23 +16,38 @@ import pl.put.poznan.buildingInfo.logic.visitors.Visitor;
 @NoArgsConstructor
 @SuperBuilder
 public class Room extends AbstractLocation {
-    protected Float area;
-    protected Float cube;
-    protected Float heating;
     /**
-     * creates a room with specified id area, volume and lightPower
+     * represents area of this room
+     */
+    protected Float area;
+    /**
+     * represents volume of this room
+     */
+    protected Float cube;
+    /**
+     * represnts light power of this room
+     */
+    protected Float lightPower;
+    /**
+     * represent power consumption for heating
+     */
+    protected Float heating;
+
+    /**
+     * creates a room with specified id, name, area, volume lightPower and heating
      * @param id unique identifier of room
+     * @param name name of room
      * @param area area of this room expressed in square meters
      * @param cube volume of this room expressed in cubic meters
      * @param heating light power of this room expressed in wats
      */
-    public Room(int id, String name,Float area, Float cube, Float heating) {
+    public Room(int id, String name, Float area, Float cube, Float lightPower, Float heating) {
         super(id, name);
         this.area = area;
         this.cube = cube;
         this.lightPower = lightPower;
         this.heating = heating;
-
+    }
 
     /**
      * Enables calculating some specific parameter such as area regarding this room
