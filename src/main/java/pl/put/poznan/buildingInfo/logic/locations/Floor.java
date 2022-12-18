@@ -3,6 +3,7 @@ package pl.put.poznan.buildingInfo.logic.locations;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import pl.put.poznan.buildingInfo.logic.visitors.Visitor;
 
 import java.util.Set;
@@ -17,6 +18,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
+@SuperBuilder
 public class Floor extends AbstractLocation {
 
     /**

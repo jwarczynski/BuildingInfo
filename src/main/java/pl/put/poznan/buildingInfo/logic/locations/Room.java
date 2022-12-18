@@ -1,6 +1,7 @@
 package pl.put.poznan.buildingInfo.logic.locations;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import pl.put.poznan.buildingInfo.logic.visitors.Visitor;
 
 /**
@@ -11,18 +12,27 @@ import pl.put.poznan.buildingInfo.logic.visitors.Visitor;
  */
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@SuperBuilder
 public class Room extends AbstractLocation {
-
+    protected Float area;
+    protected Float cube;
+    protected Float heating;
     /**
      * creates a room with specified id area, volume and lightPower
      * @param id unique identifier of room
      * @param area area of this room expressed in square meters
-     * @param volume volume of this room expressed in cubic meters
-     * @param lightPower light power of this room expressed in wats
+     * @param cube volume of this room expressed in cubic meters
+     * @param heating light power of this room expressed in wats
      */
-    public Room(int id, Float area, Float volume, Float lightPower) {
-        super(id, area, volume, lightPower);
-    }
+    public Room(int id, String name,Float area, Float cube, Float heating) {
+        super(id, name);
+        this.area = area;
+        this.cube = cube;
+        this.lightPower = lightPower;
+        this.heating = heating;
+
 
     /**
      * Enables calculating some specific parameter such as area regarding this room
@@ -38,5 +48,6 @@ public class Room extends AbstractLocation {
     public Float accept(Visitor visitor) {
         return visitor.visitRoom(this);
     }
+
 
 }
