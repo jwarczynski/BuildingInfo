@@ -19,7 +19,7 @@ import java.util.Set;
 
 @EqualsAndHashCode
 @RestController()
-@RequestMapping(value = "/info", produces = "application/json")
+@RequestMapping(value = "/api/v1/", produces = "application/json")
 public class BuildingInfoRestController {
 
     private static final Logger logger = LoggerFactory.getLogger(BuildingInfoRestController.class);
@@ -28,6 +28,7 @@ public class BuildingInfoRestController {
     public Float getBuildingArea(@RequestBody BuildingRequest buildingRequest) {
         //logger.info(id);
         Building building = BuildingMapper.toModel(buildingRequest);
+
         return building.accept(new AreaVisitor());
     }
 
@@ -41,7 +42,7 @@ public class BuildingInfoRestController {
     }
 
     @PostMapping("/area/building/floor/{floorId}/room/{roomId}")
-    public Float getFloorArea(@PathVariable int floorId, @PathVariable int roomId, @RequestBody BuildingRequest buildingRequest) {
+    public Float getRoomArea(@PathVariable int floorId, @PathVariable int roomId, @RequestBody BuildingRequest buildingRequest) {
         //logger.info(id);
 
         Building building = BuildingMapper.toModel(buildingRequest);
@@ -50,30 +51,61 @@ public class BuildingInfoRestController {
                 .stream().filter(room -> room.getId() == roomId).findFirst().get()
                 .accept(new AreaVisitor());
     }
-    //TODO implement calcutaling cube and light
-//    @GetMapping("/volume/{id}")
-//    public Float getVolume(@PathVariable String id) {
-//        logger.info(id);
-//
-//        Visitor cubatureVisitor = new CubatureVisitor();
-//        //Room room = new Room(10, 12f, 30f, 40f);
-//
-//        return room.accept(cubatureVisitor);
-//    }
-//
-//    @GetMapping("/light/{id}")
-//    public Float getLightningPower(@PathVariable String id) {
-//        logger.info(id);
-//
-//        Room room1 = new Room(10, 12f, 30f, 40f);
-//        Room room2 = new Room(20, 12f, 30f, 40f);
-//
-//        Set<Room> rooms = HashSet.newHashSet(5);
-//        rooms.add(room1);
-//        rooms.add(room2);
-//
-//        Visitor lightVisitor = new LightVisitor();
-//        Floor floor = new Floor(rooms);
-//        return floor.accept(lightVisitor);
-//    }
+
+    @PostMapping("/volume/building")
+    public Float getBuildingVolume(@RequestBody BuildingRequest buildingRequest) {
+        //logger.info(id);
+        Building building = BuildingMapper.toModel(buildingRequest);
+
+        return building.accept(new CubatureVisitor());
+    }
+
+    @PostMapping("/volume/building/floor/{id}")
+    public Float getFloorVolume(@PathVariable int id, @RequestBody BuildingRequest buildingRequest) {
+        //logger.info(id);
+
+        Building building = BuildingMapper.toModel(buildingRequest);
+
+        return building.getFloors().stream().filter(floor -> floor.getId() == id).findFirst().get().accept(new CubatureVisitor());
+    }
+
+    @PostMapping("/volume/building/floor/{floorId}/room/{roomId}")
+    public Float getRoomVolume(@PathVariable int floorId, @PathVariable int roomId, @RequestBody BuildingRequest buildingRequest) {
+        //logger.info(id);
+
+        Building building = BuildingMapper.toModel(buildingRequest);
+
+        return building.getFloors().stream().filter(floor -> floor.getId() == floorId).findFirst().get().getRooms()
+                .stream().filter(room -> room.getId() == roomId).findFirst().get()
+                .accept(new CubatureVisitor());
+    }
+
+    @PostMapping("/light/building")
+    public Float getBuildingLightPower(@RequestBody BuildingRequest buildingRequest) {
+        //logger.info(id);
+
+        Building building = BuildingMapper.toModel(buildingRequest);
+
+        return building.accept(new LightVisitor());
+    }
+
+    @PostMapping("/light/building/floor/{id}")
+    public Float getFloorLightPower(@PathVariable int id, @RequestBody BuildingRequest buildingRequest) {
+        //logger.info(id);
+
+        Building building = BuildingMapper.toModel(buildingRequest);
+
+        return building.getFloors().stream().filter(floor -> floor.getId() == id).findFirst().get().accept(new LightVisitor());
+    }
+
+    @PostMapping("/light/building/floor/{floorId}/room/{roomId}")
+    public Float getRoomLightPower(@PathVariable int floorId, @PathVariable int roomId, @RequestBody BuildingRequest buildingRequest) {
+        //logger.info(id);
+
+        Building building = BuildingMapper.toModel(buildingRequest);
+
+        return building.getFloors().stream().filter(floor -> floor.getId() == floorId).findFirst().get().getRooms()
+                .stream().filter(room -> room.getId() == roomId).findFirst().get()
+                .accept(new LightVisitor());
+    }
 }
