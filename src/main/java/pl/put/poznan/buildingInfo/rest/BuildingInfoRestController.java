@@ -6,18 +6,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 import pl.put.poznan.buildingInfo.dto.BuildingRequest;
 import pl.put.poznan.buildingInfo.logic.locations.Building;
-import pl.put.poznan.buildingInfo.logic.locations.Floor;
-import pl.put.poznan.buildingInfo.logic.locations.Room;
 import pl.put.poznan.buildingInfo.logic.visitors.AreaVisitor;
 import pl.put.poznan.buildingInfo.logic.visitors.CubatureVisitor;
 import pl.put.poznan.buildingInfo.logic.visitors.LightVisitor;
-import pl.put.poznan.buildingInfo.logic.visitors.Visitor;
 import pl.put.poznan.buildingInfo.mapper.BuildingMapper;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 @EqualsAndHashCode
 @RestController()
@@ -28,7 +23,7 @@ public class BuildingInfoRestController {
 
     @PostMapping("/area/building")
     public Map<String, Float> getBuildingArea(@RequestBody BuildingRequest buildingRequest) {
-        //logger.info(id);
+        logger.info("requested for area of building with id {}", buildingRequest.getBuildingId());
         Building building = BuildingMapper.toModel(buildingRequest);
 
         Float result = building.accept(new AreaVisitor());
@@ -40,8 +35,7 @@ public class BuildingInfoRestController {
 
     @PostMapping("/area/building/floor/{id}")
     public Map<String, Float> getFloorArea(@PathVariable int id, @RequestBody BuildingRequest buildingRequest) {
-        //logger.info(id);
-
+        logger.info("requested for area of floor with id {}", id);
         Building building = BuildingMapper.toModel(buildingRequest);
 
         Float result = building.getFloors().stream().filter(floor -> floor.getId() == id).
@@ -54,8 +48,7 @@ public class BuildingInfoRestController {
 
     @PostMapping("/area/building/floor/{floorId}/room/{roomId}")
     public Map<String, Float> getRoomArea(@PathVariable int floorId, @PathVariable int roomId, @RequestBody BuildingRequest buildingRequest) {
-        //logger.info(id);
-
+        logger.info("requested for area of room with id {} on the floor with id {}", roomId,  floorId);
         Building building = BuildingMapper.toModel(buildingRequest);
 
         Float result = building.getFloors().stream().filter(floor -> floor.getId() == floorId).findFirst().get().getRooms()
@@ -69,7 +62,7 @@ public class BuildingInfoRestController {
 
     @PostMapping("/volume/building")
     public Map<String, Float> getBuildingVolume(@RequestBody BuildingRequest buildingRequest) {
-        //logger.info(id);
+        logger.info("requested for volume of building with id {}", buildingRequest.getBuildingId());
         Building building = BuildingMapper.toModel(buildingRequest);
 
         Float result = building.accept(new CubatureVisitor());
@@ -81,7 +74,7 @@ public class BuildingInfoRestController {
 
     @PostMapping("/volume/building/floor/{id}")
     public Map<String, Float> getFloorVolume(@PathVariable int id, @RequestBody BuildingRequest buildingRequest) {
-        //logger.info(id);
+        logger.info("requested for volume of floor with id {}", id);
 
         Building building = BuildingMapper.toModel(buildingRequest);
 
@@ -96,8 +89,7 @@ public class BuildingInfoRestController {
 
     @PostMapping("/volume/building/floor/{floorId}/room/{roomId}")
     public Map<String, Float> getRoomVolume(@PathVariable int floorId, @PathVariable int roomId, @RequestBody BuildingRequest buildingRequest) {
-        //logger.info(id);
-
+        logger.info("requested for volume of room with id {} on the floor with id {}", roomId, floorId);
         Building building = BuildingMapper.toModel(buildingRequest);
 
         Float result = building.getFloors().stream().filter(floor -> floor.getId() == floorId).findFirst().get().getRooms()
@@ -111,7 +103,7 @@ public class BuildingInfoRestController {
 
     @PostMapping("/light/building")
     public Map<String, Float> getBuildingLightPower(@RequestBody BuildingRequest buildingRequest) {
-        //logger.info(id);
+        logger.info("requested for light power of building with id {}", buildingRequest.getBuildingId());
 
         Building building = BuildingMapper.toModel(buildingRequest);
 
@@ -124,7 +116,7 @@ public class BuildingInfoRestController {
 
     @PostMapping("/light/building/floor/{id}")
     public Map<String, Float> getFloorLightPower(@PathVariable int id, @RequestBody BuildingRequest buildingRequest) {
-        //logger.info(id);
+        logger.info("requested for light power of floor with id {}", id);
 
         Building building = BuildingMapper.toModel(buildingRequest);
 
@@ -137,7 +129,7 @@ public class BuildingInfoRestController {
 
     @PostMapping("/light/building/floor/{floorId}/room/{roomId}")
     public Map<String, Float> getRoomLightPower(@PathVariable int floorId, @PathVariable int roomId, @RequestBody BuildingRequest buildingRequest) {
-        //logger.info(id);
+        logger.info("requested for volume of room with id {} on the floor with id {}", roomId, floorId);
 
         Building building = BuildingMapper.toModel(buildingRequest);
         Float result = building.getFloors().stream().filter(floor -> floor.getId() == floorId).findFirst().get().getRooms()
