@@ -1,8 +1,8 @@
 # BuildingInfo
 A project for a software engineering class
 
-
-
+# Build to jar command
+```mvn clean package```
 
 
 # Project Description

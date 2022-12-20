@@ -10,8 +10,8 @@
     </parent>
     <groupId>pl.put.poznan</groupId>
     <artifactId>BuildingInfo</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <version>1.0</version>
+    <packaging>jar</packaging>
     <name>BuildingInfo</name>
     <description>BuildingInfo</description>
     <properties>
@@ -51,14 +51,28 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </exclude>
-                    </excludes>
-                </configuration>
+
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>spring-boot</classifier>
+                            <mainClass>
+                                pl.put.poznan.buildingInfo.app.BuildingInfoApplication
+                            </mainClass>
+
+                            <excludes>
+                                <exclude>
+                                    <groupId>org.projectlombok</groupId>
+                                    <artifactId>lombok</artifactId>
+                                </exclude>
+                            </excludes>
+                        </configuration>
+                    </execution>
+                </executions>
+
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -68,6 +82,9 @@
                     <show>private</show>  <!--javadoc shows all classes and members-->
                 </configuration>
             </plugin>
+
+
+
         </plugins>
     </build>
 
