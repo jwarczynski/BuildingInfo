@@ -4,6 +4,12 @@ import pl.put.poznan.buildingInfo.logic.locations.Building;
 import pl.put.poznan.buildingInfo.logic.locations.Floor;
 import pl.put.poznan.buildingInfo.logic.locations.Room;
 
+/**
+* Calculates area for specific part or whole building
+* @author Jakub Żytliński
+* @version 2.0
+*/
+
 public class AreaVisitor implements Visitor {
     /**
      * This method calculate the area of the room passed as an argument
@@ -17,7 +23,13 @@ public class AreaVisitor implements Visitor {
     public Float visitRoom(Room room) {
         return room.getArea();
     }
-
+     /**
+     * This method calculate the area of the floor passed as an argument
+     *
+     * @param floor it is a location for which AreaVisitor is determining area
+     * @return the area of the floor object passed as an argument
+     *
+     */
     @Override
     public Float visitFloor(Floor floor) {
         Float area = 0f;
@@ -26,7 +38,13 @@ public class AreaVisitor implements Visitor {
         }
         return area;
     }
-
+     /**
+     * This method calculate the area of the building passed as an argument
+     *
+     * @param building it is a location for which AreaVisitor is determining area
+     * @return the area of the building object passed as an argument
+     *
+     */
     @Override
     public Float visitBuilding(Building building) {
         Float area = 0f;
