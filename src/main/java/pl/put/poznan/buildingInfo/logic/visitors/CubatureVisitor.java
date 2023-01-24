@@ -13,7 +13,7 @@ import pl.put.poznan.buildingInfo.logic.locations.Room;
 
 public class CubatureVisitor implements Visitor{
      /**
-     * This method calculate the cubature of the room passed as an argument
+     * This method calculates the cubature of the room passed as an argument
      *
      * @param room it is a location for which CubatureVisitor is determining cubature
      * @return the cubature of the room object passed as an argument
@@ -24,7 +24,7 @@ public class CubatureVisitor implements Visitor{
         return room.getCube();
     }
       /**
-     * This method calculate the cubature of the floor passed as an argument
+     * This method calculates the cubature of the floor passed as an argument
      *
      * @param floor it is a location for which CubatureVisitor is determining cubature
      * @return the cubature of the floor object passed as an argument
@@ -39,7 +39,7 @@ public class CubatureVisitor implements Visitor{
         return volume;
     }
       /**
-     * This method calculate the cubature of the building passed as an argument
+     * This method calculates the cubature of the building passed as an argument
      *
      * @param building it is a location for which CubatureVisitor is determining cubature
      * @return the cubature of the building object passed as an argument
