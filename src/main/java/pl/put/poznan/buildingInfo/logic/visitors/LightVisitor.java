@@ -14,7 +14,7 @@ import pl.put.poznan.buildingInfo.logic.locations.Room;
 public class LightVisitor implements Visitor{
     Logger logger = LoggerFactory.getLogger(LightVisitor.class);
       /**
-     * This method calculate the total light power of the room passed as an argument
+     * This method calculates the total light power of the room passed as an argument
      *
      * @param room it is a location for which LightVisitor is determining light power
      * @return the total light power of the room object passed as an argument
@@ -25,7 +25,7 @@ public class LightVisitor implements Visitor{
         return room.getLightPower() / room.getArea();
     }
     /**
-     * This method calculate the total light power of the floor passed as an argument
+     * This method calculates the total light power of the floor passed as an argument
      *
      * @param floor it is a location for which LightVisitor is determining light power
      * @return the total light power of the floor object passed as an argument
@@ -45,7 +45,7 @@ public class LightVisitor implements Visitor{
         return meanLightPower;
     }
     /**
-     * This method calculate the total light power of the building passed as an argument
+     * This method calculates the total light power of the building passed as an argument
      *
      * @param building it is a location for which LightVisitor is determining light power
      * @return the total light power of the building object passed as an argument
