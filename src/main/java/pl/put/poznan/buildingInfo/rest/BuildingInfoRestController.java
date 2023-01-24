@@ -9,6 +9,7 @@ import pl.put.poznan.buildingInfo.logic.locations.Building;
 import pl.put.poznan.buildingInfo.logic.visitors.AreaVisitor;
 import pl.put.poznan.buildingInfo.logic.visitors.CubatureVisitor;
 import pl.put.poznan.buildingInfo.logic.visitors.LightVisitor;
+import pl.put.poznan.buildingInfo.logic.visitors.HeatVisitor;
 import pl.put.poznan.buildingInfo.mapper.BuildingMapper;
 
 import java.util.HashMap;
@@ -138,6 +139,56 @@ public class BuildingInfoRestController {
 
         Map<String, Float> response = new HashMap<>();
         response.put("result", result);
+        return response;
+    }
+
+    @PostMapping("/heat/building")
+    public Map<String, Float> getBuildingHeat(@RequestBody BuildingRequest buildingRequest) {
+        logger.info("requested for heat/cubature of building with id {}", buildingRequest.getBuildingId());
+
+        Building building = BuildingMapper.toModel(buildingRequest);
+
+        Float heatResult = building.accept(new HeatVisitor());
+
+        Float cubatureResult = building.accept(new CubatureVisitor());
+
+
+        Map<String, Float> response = new HashMap<>();
+        response.put("result", heatResult / cubatureResult);
+        return response;
+    }
+
+    @PostMapping("/heat/building/floor/{id}")
+    public Map<String, Float> getFloorHeat(@PathVariable int id, @RequestBody BuildingRequest buildingRequest) {
+        logger.info("requested for heat/cubature of floor with id {}", id);
+
+        Building building = BuildingMapper.toModel(buildingRequest);
+
+        Float heatResult = building.getFloors().stream().filter(floor -> floor.getId() == id).findFirst().get().accept(new HeatVisitor());
+
+        Float cubatureResult = building.getFloors().stream().filter(floor -> floor.getId() == id).findFirst()
+                .get().accept(new CubatureVisitor());
+
+        Map<String, Float> response = new HashMap<>();
+        response.put("result", heatResult / cubatureResult);
+        return response;
+    }
+
+    @PostMapping("/heat/building/floor/{floorId}/room/{roomId}")
+    public Map<String, Float> getRoomHeat(@PathVariable int floorId, @PathVariable int roomId, @RequestBody BuildingRequest buildingRequest) {
+        logger.info("requested for heat/cubature with id {} on the floor with id {}", roomId, floorId);
+
+        Building building = BuildingMapper.toModel(buildingRequest);
+        Float heatResult = building.getFloors().stream().filter(floor -> floor.getId() == floorId).findFirst().get().getRooms()
+                .stream().filter(room -> room.getId() == roomId).findFirst().get()
+                .accept(new HeatVisitor());
+
+        Float cubatureResult = building.getFloors().stream().filter(floor -> floor.getId() == floorId).findFirst().get().getRooms()
+                .stream().filter(room -> room.getId() == roomId).findFirst().get()
+                .accept(new CubatureVisitor());
+
+        Map<String, Float> response = new HashMap<>();
+        response.put("result", heatResult / cubatureResult);
         return response;
     }
 }
