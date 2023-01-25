@@ -6,12 +6,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 import pl.put.poznan.buildingInfo.dto.BuildingRequest;
 import pl.put.poznan.buildingInfo.logic.locations.Building;
+
+import pl.put.poznan.buildingInfo.logic.visitors.*;
 import pl.put.poznan.buildingInfo.logic.locations.Floor;
 import pl.put.poznan.buildingInfo.logic.locations.Room;
-import pl.put.poznan.buildingInfo.logic.visitors.AreaVisitor;
-import pl.put.poznan.buildingInfo.logic.visitors.CubatureVisitor;
-import pl.put.poznan.buildingInfo.logic.visitors.LightVisitor;
-import pl.put.poznan.buildingInfo.logic.visitors.HeatVisitor;
 import pl.put.poznan.buildingInfo.mapper.BuildingMapper;
 
 import java.util.ArrayList;
@@ -187,6 +185,33 @@ public class BuildingInfoRestController {
         return response;
     }
 
+    @PostMapping("/avarage_heat/building")
+    public Map<String, Float> getBuildingAvarageHeat(@RequestBody BuildingRequest buildingRequest) {
+        logger.info("requested for avarage heat of building with id {}", buildingRequest.getBuildingId());
+
+        Building building = BuildingMapper.toModel(buildingRequest);
+
+        Float result = building.accept(new AvarageHeatVisitor());
+
+
+        Map<String, Float> response = new HashMap<>();
+        response.put("result", result);
+        return response;
+    }
+
+    @PostMapping("/avarage_heat/building/floor/{id}")
+    public Map<String, Float> getFloorAvarageHeat(@PathVariable int id, @RequestBody BuildingRequest buildingRequest) {
+        logger.info("requested for avarage heat of floor with id {}", id);
+
+        Building building = BuildingMapper.toModel(buildingRequest);
+
+        Float result = building.getFloors().stream().filter(floor -> floor.getId() == id).findFirst().get().accept(new AvarageHeatVisitor());
+
+        Map<String, Float> response = new HashMap<>();
+        response.put("result", result);
+        return response;
+    }
+
     @PostMapping("/heat_limit/building")
     public ArrayList<Room> getRoomsOverLimit(@RequestBody BuildingRequest buildingRequest, @RequestParam Float limit) {
         logger.info("requested for rooms with heat consumption overt the limit {} of building with id {}", limit,buildingRequest.getBuildingId());
@@ -202,5 +227,5 @@ public class BuildingInfoRestController {
         }
         return roomsOverLimit;
     }
-
+    
 }
