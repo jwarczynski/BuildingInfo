@@ -6,12 +6,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 import pl.put.poznan.buildingInfo.dto.BuildingRequest;
 import pl.put.poznan.buildingInfo.logic.locations.Building;
+import pl.put.poznan.buildingInfo.logic.locations.Floor;
+import pl.put.poznan.buildingInfo.logic.locations.Room;
 import pl.put.poznan.buildingInfo.logic.visitors.AreaVisitor;
 import pl.put.poznan.buildingInfo.logic.visitors.CubatureVisitor;
 import pl.put.poznan.buildingInfo.logic.visitors.LightVisitor;
 import pl.put.poznan.buildingInfo.logic.visitors.HeatVisitor;
 import pl.put.poznan.buildingInfo.mapper.BuildingMapper;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -191,4 +194,21 @@ public class BuildingInfoRestController {
         response.put("result", heatResult / cubatureResult);
         return response;
     }
+
+    @PostMapping("/heat_limit/building")
+    public ArrayList<Room> getRoomsOverLimit(@RequestBody BuildingRequest buildingRequest, @RequestParam Float limit) {
+        logger.info("requested for rooms with heat consumption overt the limit {} of building with id {}", limit,buildingRequest.getBuildingId());
+
+        Building building = BuildingMapper.toModel(buildingRequest);
+        ArrayList<Room> roomsOverLimit = new ArrayList<>();
+        for (Floor floor : building.getFloors()) {
+            for (Room room : floor.getRooms()) {
+                if ((room.getHeating() / room.getCube()) > limit){
+                    roomsOverLimit.add(room);
+                }
+            }
+        }
+        return roomsOverLimit;
+    }
+
 }
