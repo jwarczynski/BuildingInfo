@@ -26,7 +26,7 @@ public class HeatVisitor implements Visitor{
     
     @Override
     public Float visitRoom(Room room) {
-        return room.getHeating();
+        return room.getHeating() / room.getCube();
     }
 
      /**
@@ -40,14 +40,16 @@ public class HeatVisitor implements Visitor{
     @Override
     public Float visitFloor(Floor floor) {
         Float heat = 0f;
+        Float cube = 0f;
         long roomCounter = floor.getRooms().stream().count();
         logger.debug("number of rooms on a floor with id {}: {}", floor.getId(), roomCounter);
 
         for (Room room : floor.getRooms()) {
-            heat += visitRoom(room);
+            heat += room.getHeating();
+            cube += room.getCube();
         }
 
-        return heat;
+        return heat/cube;
     }
      /**
      * This method calculates the energy consumption for heating in the building passed as an argument
@@ -66,7 +68,7 @@ public class HeatVisitor implements Visitor{
         for (Floor floor : building.getFloors()) {
             heat += visitFloor(floor);
         }
-        return heat;
+        return heat / floorCounter;
     }
 
 }
